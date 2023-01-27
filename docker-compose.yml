@@ -1,0 +1,13 @@
+version: '3.6'
+
+services:
+  app:
+    image: splunk/splunk
+    platform: linux/amd64
+    volumes:
+      - ./easy-ai:/opt/splunk/etc/apps/easy-ai
+    env_file:
+      - splunk.env
+    ports:
+      - 8000:8000
+      - 5062:5062 # port for splunk debugging - needs to be assigned, like dbg.enable_debugging(timeout=10, port=5062)
