@@ -1,4 +1,4 @@
-# NLP Natural Language Processor (Hugging Face)
+# NLP Natural Language Processor
 
 Splunk SPL Command to call AI Inference APIs for NLP for each event.
 
@@ -9,7 +9,7 @@ Run `bash build.sh`
 ## Run
 
 1. Start Splunk: `docker-compose up`
-2. Go to http://localhost:8000/en-US/app/easy-ai/search
+2. Go to http://localhost:8000/en-US/app/nl-processor/search
 3. Try the following example:
 
 ```

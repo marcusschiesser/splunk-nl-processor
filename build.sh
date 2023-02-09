@@ -1,4 +1,4 @@
 #!/bin/bash
-python -m pip install -r easy-ai/requirements.txt -t easy-ai/lib
-python -m pip install -r easy-ai/requirements-dev.txt
-python -m markdown2 -x target-blank-links DOCS.md > easy-ai/appserver/static/docs.html
+python -m pip install -r nl-processor/requirements.txt -t nl-processor/lib
+python -m pip install -r nl-processor/requirements-dev.txt
+python -m markdown2 -x target-blank-links DOCS.md > nl-processor/appserver/static/docs.html

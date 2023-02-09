@@ -1,7 +1,7 @@
 {
     "python.formatting.provider": "black",
     "python.analysis.extraPaths": [
-        "./easy-ai/lib"
+        "./nl-processor/lib"
     ],
     "editor.formatOnSave": true
 }
