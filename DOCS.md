@@ -31,7 +31,7 @@ The following example is using [named-entity recognition](https://en.wikipedia.o
 You can also try another model, to do named-entity recognition in German:
 
     | makeresults
-    | eval payload="in münchen gibt es viele unternehmen, z.b. bmw und siemens."
+    | eval payload="in München gibt es viele Unternehmen, z.b. BMW und Siemens."
     | ailookup model="mschiesser/ner-bert-german" api_token="xxxx"
 
 ## Sentiment Analysis
