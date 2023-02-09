@@ -5,7 +5,7 @@ services:
     image: splunk/splunk
     platform: linux/amd64
     volumes:
-      - ./easy-ai:/opt/splunk/etc/apps/easy-ai
+      - ${LOCAL_WORKSPACE_FOLDER:-./}/easy-ai:/opt/splunk/etc/apps/easy-ai
     env_file:
       - splunk.env
     ports:
