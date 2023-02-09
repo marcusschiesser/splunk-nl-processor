@@ -19,7 +19,6 @@ PAYLOAD_KEY = "payload"
 
 @Configuration()
 class AiLookupCommand(StreamingCommand):
-
     api_token = Option(name="api_token", require=True)
     model = Option(name="model", require=True)
     maxcalls = Option(
@@ -60,10 +59,13 @@ class AiLookupCommand(StreamingCommand):
                     results = [results]
                 # iterate over results list
                 for result in results:
-                    new_record = copy.deepcopy(record)
-                    for key, value in result.items():
-                        new_record[key] = value
-                    yield new_record
+                    if not isinstance(result, list):
+                        result = [result]
+                    for subresult in result:
+                        new_record = copy.deepcopy(record)
+                        for key, value in subresult.items():
+                            new_record[key] = value
+                        yield new_record
             except HTTPError as he:
                 if self.continue_on_errors:
                     self.logger.error(
