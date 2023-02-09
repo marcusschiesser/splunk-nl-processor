@@ -1,2 +1,2 @@
-.venv
 easy-ai/lib
+easy-ai/appserver/static/*.html

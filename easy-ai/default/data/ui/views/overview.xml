@@ -1,0 +1,9 @@
+<dashboard hideEdit="true" hideExport="true" version="1.1">
+  <label>Overview</label>
+  <row>
+    <panel>
+      <html src="docs.html">
+      </html>
+    </panel>
+  </row>
+</dashboard>

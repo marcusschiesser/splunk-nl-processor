@@ -8,21 +8,21 @@ Run `bash build.sh`
 
 ## Run
 
-1. Start Splunk: `docker-compose up --build`
+1. Start Splunk: `docker-compose up`
 2. Go to http://localhost:8000/en-US/app/easy-ai/search
 3. Try the following example:
 
 ```
-| makeresults \
-| eval payload="in münchen gibt es viele unternehmen, z.b. bmw und siemens."\
+| makeresults
+| eval payload="in münchen gibt es viele unternehmen, z.b. bmw und siemens."
 | ailookup model="mschiesser/ner-bert-german" api_token="xxxx"
 ```
 
-Get your `api_token` at hf.co/settings/tokens
+Get your `api_token` at http://hf.co/settings/tokens
 
 ## Docs
 
-see [searchbnf.conf](./easy-ai/default/searchbnf.conf)
+see [DOCS.md](./DOCS.md)
 
 ## TODOs
 
