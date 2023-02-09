@@ -1,6 +1,6 @@
-# Easy AI
+# NLP Natural Language Processor (Hugging Face)
 
-Splunk SPL Command to call AI Inference APIs for each event.
+Splunk SPL Command to call AI Inference APIs for NLP for each event.
 
 ## Build
 
@@ -14,7 +14,7 @@ Run `bash build.sh`
 
 ```
 | makeresults
-| eval payload="in münchen gibt es viele unternehmen, z.b. bmw und siemens."
+| eval payload="in München gibt es viele Unternehmen, z.b. BMW und Siemens."
 | ailookup model="mschiesser/ner-bert-german" api_token="xxxx"
 ```
 

@@ -1,9 +1,8 @@
 # About
 
-Splunk SPL command to call AI Inference APIs for each event.
-Currently, only the Inference API from [Hugging Face](https://huggingface.co/) is supported. 
-Hugging face contains all different kinds of AI models - for Splunk use cases mostly the [Natural Language Processing models](https://huggingface.co/models) (e.g. Text Classification) are of interest. 
-For example, it's possible to detect malicious domain names with text classification.
+With this app, you can now perform Natural Language Processing tasks directly within Splunk using the powerful [Hugging Face](https://huggingface.co/) Inference API. 
+Hugging Face is a leading provider of state-of-the-art Natural Language Processing (NLP) models and has been at the forefront of NLP research and development.
+This app allows you to leverage the power of Hugging Face's NLP models to analyze unstructured text data within Splunk. You can perform tasks such as sentiment analysis, named entity recognition, and text classification, among others, to gain insights into your data. The app is easy to use and integrates seamlessly with Splunk, allowing you to analyze your data within the familiar Splunk interface.
 
 # Usage
 
@@ -36,7 +35,7 @@ You can also try another model, to do named-entity recognition in German:
 
 ## Sentiment Analysis
 
-The following example is using [Sentiment analysis](https://en.wikipedia.org/wiki/Sentiment_analysis), to extract the sentiment of the sentence given as `payload`: 
+The following example is using [sentiment analysis](https://en.wikipedia.org/wiki/Sentiment_analysis), to extract the sentiment of the sentence given as `payload`: 
 
     | makeresults
     | eval payload="Covid cases are increasing fast!"
