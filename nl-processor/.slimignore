@@ -1,0 +1,5 @@
+*.py[co]
+/default/indexes.conf
+/local/*
+/metadata/local.meta
+requirements*.txt

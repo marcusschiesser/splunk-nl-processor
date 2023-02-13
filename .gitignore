@@ -1,2 +1,4 @@
 nl-processor/lib
 nl-processor/appserver/static/*.html
+.appinspect
+deploy
