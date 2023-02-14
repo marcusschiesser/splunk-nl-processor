@@ -1,4 +1,8 @@
 pytest>=6.2.5
-black>=22.12.0
 markdown2
-wheel
+# slim (installation will show a permission error, but does work nevertheless - man link is not needed)
+splunk-packaging-toolkit==1.0.1
+semantic_version==2.6.0
+splunk-appinspect
+# black doesn't work with splunk-appinspect, so re-enable it manually if needed 
+# black>=22.12.0
