@@ -22,7 +22,7 @@ Get your `api_token` at http://hf.co/settings/tokens
 
 ## Docs
 
-see [DOCS.md](./DOCS.md)
+see [./nl-processor/README](./nl-processor/README)
 
 ## TODOs
 
