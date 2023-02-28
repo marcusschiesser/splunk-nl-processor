@@ -47,5 +47,8 @@
       "version": "3.7"
     }
   },
-  "postCreateCommand": "sudo apt-get update -y && sudo apt-get install -y libmagic-dev"
+  "postCreateCommand": "sudo apt-get update -y && sudo apt-get install -y libmagic-dev",
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+  ]
 }
