@@ -1,10 +1,13 @@
 # About
 
-With this app, you can now perform Natural Language Processing tasks directly within Splunk using the powerful [Hugging Face](https://huggingface.co/) Inference API. 
+With this app, you can now perform Natural Language Processing tasks directly within Splunk using the powerful [Hugging Face](https://huggingface.co/) API. 
 Hugging Face is a leading provider of state-of-the-art Natural Language Processing (NLP) models and has been at the forefront of NLP research and development.
-This app allows you to leverage the power of Hugging Face's NLP models to analyze unstructured text data within Splunk. You can perform tasks such as sentiment analysis, named entity recognition, and text classification, among others, to gain insights into your data. The app is easy to use and integrates seamlessly with Splunk, allowing you to analyze your data within the familiar Splunk interface.
+This app allows you to leverage the power of Hugging Face's NLP models to analyze unstructured text data within Splunk. You can perform tasks such as sentiment analysis, named entity recognition, and text classification, among others, to gain insights into your data. 
+Hugging Face provides also over [20k datasets](https://huggingface.co/datasets) which can be easily loaded into Splunk as testdata using this app.
 
 # Usage
+
+## Inference
 
 The `ailookup` command runs the [Hugging Face AI Inference API](https://huggingface.co/inference-api) for each input event by passing the event's `payload` parameter and returns a new event for each result of the API call.
 
@@ -12,6 +15,13 @@ The parameter `model` specifies the ID of the [Hugging Face model](https://huggi
 Pass the [API token for the Hugging Face API](http://hf.co/settings/tokens) as parameter `api_token`.
 If you want to limit the amount of API calls, you can specify a maximum number of calls with the parameter `maxcalls`.
 If you want to continue on errors, you can specify the parameter `continue_on_errors=true`.
+
+## Loading Datasets
+
+The `hfdataset` command runs the [Hugging Face Datasets API](https://huggingface.co/docs/datasets-server/index) to retrieve test data from the [datasets from Hugging Face](https://huggingface.co/datasets).
+The parameter `dataset` specifies the name of the dataset to download, e.g. [`yelp_review_full`](https://huggingface.co/datasets/yelp_review_full).
+Pass the [API token for the Hugging Face API](http://hf.co/settings/tokens) as parameter `api_token`.
+Per default, the `train` split of the dataset is used. If you want to set another split (e.g. the `test` split), use the `split` parameter.
 
 # Examples
 
