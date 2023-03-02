@@ -9,7 +9,7 @@ Run `bash build.sh`
 ## Run
 
 1. Start Splunk: `docker-compose up`
-2. Go to http://localhost:8000/en-US/app/nl-processor/search
+2. Go to http://localhost:8000/en-US/app/nl_processor/search
 3. Try the following example:
 
 ```
@@ -22,7 +22,7 @@ Get your `api_token` at http://hf.co/settings/tokens
 
 ## Docs
 
-see [./nl-processor/README](./nl-processor/README)
+see [./nl_processor/README](./nl_processor/README)
 
 ## TODOs
 

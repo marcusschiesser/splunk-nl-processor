@@ -5,7 +5,7 @@ services:
     image: splunk/splunk
     platform: linux/amd64
     volumes:
-      - ${LOCAL_WORKSPACE_FOLDER:-./}/nl-processor:/opt/splunk/etc/apps/nl-processor
+      - ${LOCAL_WORKSPACE_FOLDER:-./}/nl_processor:/opt/splunk/etc/apps/nl_processor
     env_file:
       - splunk.env
     ports:
