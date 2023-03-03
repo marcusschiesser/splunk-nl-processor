@@ -17,4 +17,4 @@ python -m markdown2 -x target-blank-links nl_processor/README > nl_processor/app
 python -m slim package nl_processor -o deploy -u error
 
 # check package
-/usr/local/python/current/bin/splunk-appinspect inspect ./deploy/nl_processor-*.tar.gz --mode test --generate-feedback  --output-file "deploy/AppInspect-results.json"
+splunk-appinspect inspect ./deploy/nl_processor-*.tar.gz --mode test --generate-feedback  --output-file "deploy/AppInspect-results.json"
