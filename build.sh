@@ -1,6 +1,7 @@
 #!/bin/bash
-# remove 
+# clean up 
 rm nl_processor/app.manifest
+rm -fr deploy
 
 # install app's dependencies
 python -m pip install -r nl_processor/requirements.txt -t nl_processor/lib

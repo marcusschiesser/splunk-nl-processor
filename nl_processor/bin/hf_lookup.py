@@ -18,7 +18,7 @@ PAYLOAD_KEY = "payload"
 
 
 @Configuration()
-class AiLookupCommand(StreamingCommand):
+class HfLookupCommand(StreamingCommand):
     api_token = Option(name="api_token", require=True)
     model = Option(name="model", require=True)
     maxcalls = Option(
@@ -75,4 +75,4 @@ class AiLookupCommand(StreamingCommand):
                     raise he
 
 
-dispatch(AiLookupCommand, sys.argv, sys.stdin, sys.stdout, __name__)
+dispatch(HfLookupCommand, sys.argv, sys.stdin, sys.stdout, __name__)

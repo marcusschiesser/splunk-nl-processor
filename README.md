@@ -15,7 +15,7 @@ Run `bash build.sh`
 ```
 | makeresults
 | eval payload="in München gibt es viele Unternehmen, z.b. BMW und Siemens."
-| ailookup model="mschiesser/ner-bert-german" api_token="xxxx"
+| hflookup model="mschiesser/ner-bert-german" api_token="xxxx"
 ```
 
 Get your `api_token` at http://hf.co/settings/tokens
