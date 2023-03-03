@@ -5,7 +5,8 @@ rm -fr deploy
 
 # install app's dependencies
 python -m pip install -r nl_processor/requirements.txt -t nl_processor/lib
-chmod 644 nl_processor/lib/charset_normalizer/*.so # otherwise app-inspect fails
+# fix app-inspect fails
+find nl_processor/lib -type f -exec chmod 644 {} \;
 
 # install build dependencies
 python -m pip install -r nl_processor/requirements-dev.txt

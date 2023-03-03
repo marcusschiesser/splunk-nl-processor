@@ -61,3 +61,7 @@ To run the command in production, you might want to:
 4. Set up a [MLOps](https://en.wikipedia.org/wiki/MLOps) pipeline for Splunk to update your AI models during run-time.
 
 Feel free to [contact me](mailto:mail@marcusschiesser.de) for any of these problems. My team and I are glad to help.
+
+# Binary File Declaration
+
+This app is using the Python bindings for the binary library [snappy](https://github.com/google/snappy), [python-snappy](https://github.com/andrix/python-snappy/tree/0.6.1) in version 0.6.1, to read compressed [parquet](https://parquet.apache.org/) files from Hugging Faces.
