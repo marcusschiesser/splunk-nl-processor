@@ -1,6 +1,8 @@
 #!/bin/bash
-# clean up 
+# clean up
 rm nl_processor/app.manifest
+rm -fr nl_processor/local
+rm nl_processor/metadata/local.meta
 rm -fr deploy
 
 # install app's dependencies
@@ -12,10 +14,10 @@ find nl_processor/lib -type f -exec chmod 644 {} \;
 python -m pip install -r nl_processor/requirements-dev.txt
 
 # build docs
-python -m markdown2 -x target-blank-links nl_processor/README > nl_processor/appserver/static/docs.html
+python -m markdown2 -x target-blank-links nl_processor/README >nl_processor/appserver/static/docs.html
 
 # build package
 python -m slim package nl_processor -o deploy -u error
 
 # check package
-splunk-appinspect inspect ./deploy/nl_processor-*.tar.gz --mode test --generate-feedback  --output-file "deploy/AppInspect-results.json"
+splunk-appinspect inspect ./deploy/nl_processor-*.tar.gz --mode test --generate-feedback --output-file "deploy/AppInspect-results.json"

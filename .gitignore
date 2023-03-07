@@ -4,3 +4,7 @@ nl_processor/app.manifest
 .appinspect
 deploy
 inspect.yml
+__pycache__
+nl_processor/local
+nl_processor/metadata/local.meta
+.venv

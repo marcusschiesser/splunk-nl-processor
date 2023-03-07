@@ -1,18 +1,19 @@
 # About
 
-With this app, you can now perform Natural Language Processing tasks directly within Splunk using the powerful [Hugging Face](https://huggingface.co/) API. 
+With this app, you can now perform Natural Language Processing tasks directly within Splunk using the powerful [Hugging Face](https://huggingface.co/) API.
 Hugging Face is a leading provider of state-of-the-art Natural Language Processing (NLP) models and has been at the forefront of NLP research and development.
-This app allows you to leverage the power of Hugging Face's NLP models to analyze unstructured text data within Splunk. You can perform tasks such as sentiment analysis, named entity recognition, and text classification, among others, to gain insights into your data. 
+This app allows you to leverage the power of Hugging Face's NLP models to analyze unstructured text data within Splunk. You can perform tasks such as sentiment analysis, named entity recognition, and text classification, among others, to gain insights into your data.
 Hugging Face provides also over [20k datasets](https://huggingface.co/datasets) which can be easily loaded into Splunk as testdata using this app.
 
 # Usage
+
+Before running any of the commands, please make sure to get an [API token from Hugging Face](http://hf.co/settings/tokens) and configure it in the [setup page](/app/nl_processor/setup).
 
 ## Inference
 
 The `hflookup` command runs the [Hugging Face AI Inference API](https://huggingface.co/inference-api) for each input event by passing the event's `payload` parameter and returns a new event for each result of the API call.
 
 The parameter `model` specifies the ID of the [Hugging Face model](https://huggingface.co/models) to use, e.g. [`mschiesser/ner-bert-german`](https://huggingface.co/mschiesser/ner-bert-german).
-Pass the [API token for the Hugging Face API](http://hf.co/settings/tokens) as parameter `api_token`.
 If you want to limit the amount of API calls, you can specify a maximum number of calls with the parameter `maxcalls`.
 If you want to continue on errors, you can specify the parameter `continue_on_errors=true`.
 
@@ -20,36 +21,33 @@ If you want to continue on errors, you can specify the parameter `continue_on_er
 
 The `hfdataset` command runs the [Hugging Face Datasets API](https://huggingface.co/docs/datasets-server/index) to retrieve test data from the [datasets from Hugging Face](https://huggingface.co/datasets).
 The parameter `dataset` specifies the name of the dataset to download, e.g. [`yelp_review_full`](https://huggingface.co/datasets/yelp_review_full).
-Pass the [API token for the Hugging Face API](http://hf.co/settings/tokens) as parameter `api_token`.
 Per default, the `train` split of the dataset is used. If you want to set another split (e.g. the `test` split), use the `split` parameter.
 
 # Examples
-
-Before running any of the examples, please make sure to get an [API token from Hugging Face](http://hf.co/settings/tokens) and use it in the `api_token` parameter.
 
 Note that some models in Hugging Face are not often used and therefore loaded on-demand. If you're getting a `Model ... is currently loading` error, please try again after half a minute.
 
 ## Named Entity Recognition
 
-The following example is using [named-entity recognition](https://en.wikipedia.org/wiki/Named-entity_recognition), to extract the location, names, and organizations of the string given as `payload`: 
+The following example is using [named-entity recognition](https://en.wikipedia.org/wiki/Named-entity_recognition), to extract the location, names, and organizations of the string given as `payload`:
 
     | makeresults
     | eval payload="My name is Clara and I live in San Jose, California and I am working there for Splunk."
-    | hflookup model="Jean-Baptiste/roberta-large-ner-english" api_token="xxxx"
+    | hflookup model="Jean-Baptiste/roberta-large-ner-english"
 
 You can also try another model, to do named-entity recognition in German:
 
     | makeresults
     | eval payload="in München gibt es viele Unternehmen, z.b. BMW und Siemens."
-    | hflookup model="mschiesser/ner-bert-german" api_token="xxxx"
+    | hflookup model="mschiesser/ner-bert-german"
 
 ## Sentiment Analysis
 
-The following example is using [sentiment analysis](https://en.wikipedia.org/wiki/Sentiment_analysis), to extract the sentiment of the sentence given as `payload`: 
+The following example is using [sentiment analysis](https://en.wikipedia.org/wiki/Sentiment_analysis), to extract the sentiment of the sentence given as `payload`:
 
     | makeresults
     | eval payload="Covid cases are increasing fast!"
-    | hflookup model="cardiffnlp/twitter-roberta-base-sentiment-latest" api_token="xxxx"
+    | hflookup model="cardiffnlp/twitter-roberta-base-sentiment-latest"
 
 # Contact
 
@@ -64,4 +62,4 @@ Feel free to [contact me](mailto:mail@marcusschiesser.de) for any of these probl
 
 # Binary File Declaration
 
-This app is using the Python bindings for the binary library [snappy](https://github.com/google/snappy), [python-snappy](https://github.com/andrix/python-snappy/tree/0.6.1) in version 0.6.1, to read compressed [parquet](https://parquet.apache.org/) files from Hugging Faces.
+This app is using the Python bindings for the binary library [snappy](https://github.com/google/snappy), [python-snappy](https://github.com/andrix/python-snappy/tree/0.6.1) in version 0.6.1, to read compressed [parquet](https://parquet.apache.org/) files from Hugging Face.

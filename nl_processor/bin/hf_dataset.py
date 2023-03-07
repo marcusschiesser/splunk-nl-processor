@@ -8,11 +8,13 @@ from splunklib.searchcommands import dispatch, GeneratingCommand, Configuration,
 import requests
 import parquet
 from io import BytesIO
+from splunklib import client
+from passwords import decode_password
 
 
 @Configuration()
 class HfDatasetCommand(GeneratingCommand):
-    api_token = Option(name="api_token", require=True)
+    api_token = None
     dataset = Option(name="dataset", require=True)
     split = Option(name="split", default="train", require=False)
 
@@ -35,6 +37,11 @@ class HfDatasetCommand(GeneratingCommand):
         return json["parquet_files"]
 
     def generate(self):
+        session_key = self.metadata.searchinfo.session_key
+        app_name = self.metadata.searchinfo.app
+        service = client.Service(token=session_key, app=app_name)
+        self.api_token = decode_password(service, "api_token")
+
         files = self.get_dataset()
         self.logger.info(
             f'msg="Successfully called HF dataset API" dataset="{self.dataset}"'

@@ -1,0 +1,26 @@
+<form script="setup.js" version="1.1">
+  <label>Setup</label>
+  <fieldset submitButton="false"></fieldset>
+  <row>
+    <panel>
+      <title>Hugging Face Settings</title>
+      <html>
+        <div class="form-horizontal">
+          <p><a href="http://hf.co/settings/tokens" target="_blank">Get your API token</a> from
+            Hugging Face and enter it here.</p>
+          <splunk-control-group label="API Token" help="The API Token retrieved from Hugging Face">
+            <splunk-text-input name="api_token">
+            </splunk-text-input>
+          </splunk-control-group>
+        </div>
+      </html>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <html>
+        <button id="setupButton" class="btn btn-primary">Save</button>
+      </html>
+    </panel>
+  </row>
+</form>

@@ -13,13 +13,15 @@ from splunklib.searchcommands import (
 from urllib.error import HTTPError
 import requests
 import copy
+from splunklib import client
+from passwords import decode_password
 
 PAYLOAD_KEY = "payload"
 
 
 @Configuration()
 class HfLookupCommand(StreamingCommand):
-    api_token = Option(name="api_token", require=True)
+    api_token = None
     model = Option(name="model", require=True)
     maxcalls = Option(
         name="maxcalls", default=100, require=False, validate=validators.Integer(1)
@@ -41,6 +43,10 @@ class HfLookupCommand(StreamingCommand):
         return response.json()
 
     def stream(self, records):
+        session_key = self.metadata.searchinfo.session_key
+        app_name = self.metadata.searchinfo.app
+        service = client.Service(token=session_key, app=app_name)
+        self.api_token = decode_password(service, "api_token")
         # Run saved search for each input record
         for index, record in enumerate(records):
             if index == self.maxcalls:
