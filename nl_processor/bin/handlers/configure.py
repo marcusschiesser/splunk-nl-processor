@@ -25,12 +25,14 @@ class ConfigureHandler(PersistentServerConnectionApplication):
         try:
             request = json.loads(in_string)
             payload = flatten_query_params(request["form"])
-            api_token = payload["api_token"]
+            hf_api_token = payload["hf_api_token"]
+            openai_api_key = payload["openai_api_key"]
 
             service = client.Service(
                 token=request["system_authtoken"], sharing="app", app="nl_processor"
             )
-            encode_password(service, "api_token", api_token)
+            encode_password(service, "hf_api_token", hf_api_token)
+            encode_password(service, "openai_api_key", openai_api_key)
 
             return {"payload": {"success": "true"}, "status": 200}
         except (KeyError, ValueError) as e:

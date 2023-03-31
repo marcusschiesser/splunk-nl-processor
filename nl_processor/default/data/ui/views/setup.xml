@@ -8,8 +8,21 @@
         <div class="form-horizontal">
           <p><a href="http://hf.co/settings/tokens" target="_blank">Get your API token</a> from
             Hugging Face and enter it here.</p>
-          <splunk-control-group label="API Token" help="The API Token retrieved from Hugging Face">
-            <splunk-text-input name="api_token">
+          <splunk-control-group label="API Token" help="The API token retrieved from Hugging Face">
+            <splunk-text-input name="hf_api_token">
+            </splunk-text-input>
+          </splunk-control-group>
+        </div>
+      </html>
+    </panel>
+    <panel>
+      <title>OpenAI Settings</title>
+      <html>
+        <div class="form-horizontal">
+          <p><a href="https://platform.openai.com/account/api-keys" target="_blank">Get your API
+            token</a> from OpenAI and enter it here.</p>
+          <splunk-control-group label="API Key" help="The API key retrieved from  OpenAI">
+            <splunk-text-input name="openai_api_key">
             </splunk-text-input>
           </splunk-control-group>
         </div>

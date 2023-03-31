@@ -1,5 +1,4 @@
 import os, sys
-import time
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "lib"))
 from splunklib.searchcommands import dispatch, GeneratingCommand, Configuration, Option
@@ -14,7 +13,7 @@ from passwords import decode_password
 
 @Configuration()
 class HfDatasetCommand(GeneratingCommand):
-    api_token = None
+    hf_api_token = None
     dataset = Option(name="dataset", require=True)
     split = Option(name="split", default="train", require=False)
 
@@ -26,7 +25,7 @@ class HfDatasetCommand(GeneratingCommand):
 
     def get_dataset(self):
         """Calls the Huggingface Datasets API"""
-        headers = {"Authorization": f"Bearer {self.api_token}"}
+        headers = {"Authorization": f"Bearer {self.hf_api_token}"}
         API_URL = (
             f"https://datasets-server.huggingface.co/parquet?dataset={self.dataset}"
         )
@@ -40,7 +39,7 @@ class HfDatasetCommand(GeneratingCommand):
         session_key = self.metadata.searchinfo.session_key
         app_name = self.metadata.searchinfo.app
         service = client.Service(token=session_key, app=app_name)
-        self.api_token = decode_password(service, "api_token")
+        self.hf_api_token = decode_password(service, "hf_api_token")
 
         files = self.get_dataset()
         self.logger.info(

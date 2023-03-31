@@ -21,7 +21,7 @@ PAYLOAD_KEY = "payload"
 
 @Configuration()
 class HfLookupCommand(StreamingCommand):
-    api_token = None
+    hf_api_token = None
     model = Option(name="model", require=True)
     maxcalls = Option(
         name="maxcalls", default=100, require=False, validate=validators.Integer(1)
@@ -37,7 +37,7 @@ class HfLookupCommand(StreamingCommand):
         """Calls the Huggingface Inference API
         :raises HTTPError: Raised for unsuccessful queries.
         """
-        headers = {"Authorization": f"Bearer {self.api_token}"}
+        headers = {"Authorization": f"Bearer {self.hf_api_token}"}
         API_URL = f"https://api-inference.huggingface.co/models/{self.model}"
         response = requests.post(API_URL, headers=headers, json=payload)
         return response.json()
@@ -46,7 +46,7 @@ class HfLookupCommand(StreamingCommand):
         session_key = self.metadata.searchinfo.session_key
         app_name = self.metadata.searchinfo.app
         service = client.Service(token=session_key, app=app_name)
-        self.api_token = decode_password(service, "api_token")
+        self.hf_api_token = decode_password(service, "hf_api_token")
         # Run saved search for each input record
         for index, record in enumerate(records):
             if index == self.maxcalls:

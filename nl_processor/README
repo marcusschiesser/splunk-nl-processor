@@ -1,13 +1,15 @@
 # About
 
-With this app, you can now perform Natural Language Processing tasks directly within Splunk using the powerful [Hugging Face](https://huggingface.co/) API.
+With this app, you can now perform Natural Language Processing tasks directly within Splunk using the powerful [Hugging Face](https://huggingface.co/) or [OpenAI](https://openai.com/) APIs.
 Hugging Face is a leading provider of state-of-the-art Natural Language Processing (NLP) models and has been at the forefront of NLP research and development.
 This app allows you to leverage the power of Hugging Face's NLP models to analyze unstructured text data within Splunk. You can perform tasks such as sentiment analysis, named entity recognition, and text classification, among others, to gain insights into your data.
 Hugging Face provides also over [20k datasets](https://huggingface.co/datasets) which can be easily loaded into Splunk as testdata using this app.
+The [OpenAI Embedding API](https://platform.openai.com/docs/guides/embeddings) can be used for generating high-quality vector representations of text, enabling tasks such as semantic similarity, clustering and text classification.
 
 # Usage
 
 Before running any of the commands, please make sure to get an [API token from Hugging Face](http://hf.co/settings/tokens) and configure it in the [setup page](/app/nl_processor/setup).
+If you want to use OpenAI embeddings, please get an [API key from OpenAI](https://platform.openai.com/account/api-keys) and configure it also in the [setup page](/app/nl_processor/setup).
 
 ## Inference
 
@@ -22,6 +24,15 @@ If you want to continue on errors, you can specify the parameter `continue_on_er
 The `hfdataset` command runs the [Hugging Face Datasets API](https://huggingface.co/docs/datasets-server/index) to retrieve test data from the [datasets from Hugging Face](https://huggingface.co/datasets).
 The parameter `dataset` specifies the name of the dataset to download, e.g. [`yelp_review_full`](https://huggingface.co/datasets/yelp_review_full).
 Per default, the `train` split of the dataset is used. If you want to set another split (e.g. the `test` split), use the `split` parameter.
+
+## OpenAI Embeddings
+
+The `openaiembeddings` command runs the [OpenAI Embeddings API](https://platform.openai.com/docs/guides/embeddings) to retrieve embeddings for each input event.
+The parameter `input_field` defines the name of the field that contains the text for which an embedding should be calculated. The embedding is stored in the `embedding` field for each event.
+Per default the model `text-embedding-ada-002` is used - this can be changed with the `model` parameter.
+If you want to limit the amount of API calls, you can specify a maximum number of calls with the parameter `maxcalls`.
+If you want to continue on errors, you can specify the parameter `continue_on_errors=true`.
+
 
 # Examples
 
@@ -48,6 +59,14 @@ The following example is using [sentiment analysis](https://en.wikipedia.org/wik
     | makeresults
     | eval payload="Covid cases are increasing fast!"
     | hflookup model="cardiffnlp/twitter-roberta-base-sentiment-latest"
+
+## Embeddings
+
+The following example is generating an [embedding](https://en.wikipedia.org/wiki/Word_embedding) for the text in the field `input`:
+
+    | makeresults
+    | eval input="Covid cases are increasing fast!"
+    | openaiembeddings input_field=input
 
 # Contact
 
