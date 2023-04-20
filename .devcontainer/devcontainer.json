@@ -5,21 +5,25 @@
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "customizations": {
     "vscode": {
+      "settings": {
+        // workaround for https://github.com/microsoft/vscode-remote-release/issues/8169
+        "extensions.verifySignature": false
+      },
       // Add the IDs of extensions you want installed when the container is created.
       "extensions": [
-		"ms-python.python",
-		"ms-python.vscode-pylance",
-		"ms-azuretools.vscode-docker",
-		"Splunk.splunk",
-		"esbenp.prettier-vscode",
-		"dbaeumer.vscode-eslint",
-		"steoates.autoimport",
-		"mgmcdermott.vscode-language-babel",
-		"streetsidesoftware.code-spell-checker",
-		"shivanshu-gupta.scratchpads",
-		"redhat.vscode-xml",
-		"GitHub.copilot"
-	]
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-azuretools.vscode-docker",
+        "Splunk.splunk",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "steoates.autoimport",
+        "mgmcdermott.vscode-language-babel",
+        "streetsidesoftware.code-spell-checker",
+        "shivanshu-gupta.scratchpads",
+        "redhat.vscode-xml",
+        "GitHub.copilot"
+      ]
     }
   },
   // Use 'forwardPorts' to make a list of ports inside the container available locally.

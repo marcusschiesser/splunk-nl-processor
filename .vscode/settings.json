@@ -3,5 +3,13 @@
     "python.analysis.extraPaths": [
         "./nl_processor/lib"
     ],
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "cSpell.words": [
+        "makeresults",
+        "maxcalls",
+        "openai",
+        "openaiembeddings",
+        "searchcommands",
+        "splunklib"
+    ]
 }

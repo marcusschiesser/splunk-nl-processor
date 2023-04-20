@@ -22,7 +22,17 @@ class OpenAIEmbeddingCommand(StreamingCommand):
     openai_api_key = None
     model = Option(name="model", default="text-embedding-ada-002", require=False)
     input_field = Option(
-        name="input_field", require=True, validate=validators.Fieldname()
+        name="input",
+        default="input",
+        require=False,
+        validate=validators.Fieldname(),
+    )
+    input = Option(name="input_text", require=False)
+    output_field = Option(
+        name="output",
+        default="embedding",
+        require=False,
+        validate=validators.Fieldname(),
     )
 
     maxcalls = Option(
@@ -47,9 +57,12 @@ class OpenAIEmbeddingCommand(StreamingCommand):
         response = requests.post(
             API_URL, headers=headers, json={"input": input, "model": self.model}
         )
+        self.logger.info(
+            f'msg="Successfully called OpenAI embedding API" model="{self.model}" input_text="{input}"'
+        )
         json = response.json()
         if "error" in json:
-            return json["error"]["message"] 
+            return json["error"]["message"]
         return json["data"][0]["embedding"]
 
     def stream(self, records):
@@ -57,29 +70,30 @@ class OpenAIEmbeddingCommand(StreamingCommand):
         app_name = self.metadata.searchinfo.app
         service = client.Service(token=session_key, app=app_name)
         self.openai_api_key = decode_password(service, "openai_api_key")
+        # if input is specified, use it to call the embedding API
+        if self.input:
+            embedding = self.get_embedding(self.input)
         # Run saved search for each input record
         for index, record in enumerate(records):
-            if index == self.maxcalls:
-                self.logger.warning(
-                    f"Reached limit of max. {self.maxcalls} API calls. Skipping remaining records. Try increasing the `maxcalls` argument."
-                )
-                break
-            try:
-                input = record[self.input_field]
-                embedding = self.get_embedding(input)
-                self.logger.info(
-                    f'msg="Successfully called OpenAI embedding API" model="{self.model}" input_text="{input}"'
-                )
-                new_record = copy.deepcopy(record)
-                new_record["embedding"] = embedding
-                yield new_record
-            except HTTPError as he:
-                if self.continue_on_errors:
-                    self.logger.error(
-                        f'msg="Failed to call OpenAI embedding API. Continuing as continue_on_errors=true." model="{self.model}" input_text="{input}" error="{str(he)}"'
+            if not self.input:
+                if index == self.maxcalls:
+                    self.logger.warning(
+                        f"Reached limit of max. {self.maxcalls} API calls. Skipping remaining records. Try increasing the `maxcalls` argument."
                     )
-                else:
-                    raise he
+                    break
+                try:
+                    input = record[self.input_field]
+                    embedding = self.get_embedding(input)
+                except HTTPError as he:
+                    if self.continue_on_errors:
+                        self.logger.error(
+                            f'msg="Failed to call OpenAI embedding API. Continuing as continue_on_errors=true." model="{self.model}" input_text="{input}" error="{str(he)}"'
+                        )
+                    else:
+                        raise he
+            new_record = copy.deepcopy(record)
+            new_record[self.output_field] = embedding
+            yield new_record
 
 
 dispatch(OpenAIEmbeddingCommand, sys.argv, sys.stdin, sys.stdout, __name__)

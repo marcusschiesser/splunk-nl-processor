@@ -33,7 +33,6 @@ Per default the model `text-embedding-ada-002` is used - this can be changed wit
 If you want to limit the amount of API calls, you can specify a maximum number of calls with the parameter `maxcalls`.
 If you want to continue on errors, you can specify the parameter `continue_on_errors=true`.
 
-
 # Examples
 
 Note that some models in Hugging Face are not often used and therefore loaded on-demand. If you're getting a `Model ... is currently loading` error, please try again after half a minute.
@@ -66,7 +65,29 @@ The following example is generating an [embedding](https://en.wikipedia.org/wiki
 
     | makeresults
     | eval input="Covid cases are increasing fast!"
-    | openaiembeddings input_field=input
+    | openaiembeddings input=input
+
+Embeddings can be used for tasks such as semantic search, clustering and text classification.
+
+## Semantic Search
+
+The following example is using embeddings, to find the movie in the [dataset `movies-small`](https://huggingface.co/datasets/mfumanelli/movies-small) whose plot best matches a given input text.
+
+Let's first load the movie dataset and store the embeddings in a lookup table:
+
+    | hfdataset dataset=mfumanelli/movies-small
+    | openaiembeddings input=plot_synopsis
+    | outputlookup movies.csv
+
+*Note*: Using a lookup table is not necessary, but that way we can reuse the embeddings for multiple queries.
+
+Now we can use the `dotproduct` command to calculate the [cosine similarity](https://en.wikipedia.org/wiki/Cosine_similarity) between the embedding of the input text and the embeddings of each movie plot:
+
+    | inputlookup movies.csv
+    | openaiembeddings input_text="sci-fi movie with rebels" output=search
+    | dotproduct vector1=embedding vector2=search output=similarities
+    | sort - similarities
+    | table title, plot_synopsis, similarities
 
 # Contact
 
