@@ -9,7 +9,7 @@ The [OpenAI Embedding API](https://platform.openai.com/docs/guides/embeddings) c
 # Usage
 
 Before running any of the commands, please make sure to get an [API token from Hugging Face](http://hf.co/settings/tokens) and configure it in the [setup page](/app/nl_processor/setup).
-If you want to use OpenAI embeddings, please get an [API key from OpenAI](https://platform.openai.com/account/api-keys) and configure it also in the [setup page](/app/nl_processor/setup).
+If you want to use OpenAI embeddings, please get an [API key from OpenAI](https://platform.openai.com/account/api-keys) and configure it also in the [setup page](/app/nl_processor/setup). Note that using the OpenAI API requires a paid account.
 
 ## Inference
 
@@ -28,7 +28,8 @@ Per default, the `train` split of the dataset is used. If you want to set anothe
 ## OpenAI Embeddings
 
 The `openaiembeddings` command runs the [OpenAI Embeddings API](https://platform.openai.com/docs/guides/embeddings) to retrieve embeddings for each input event.
-The parameter `input_field` defines the name of the field that contains the text for which an embedding should be calculated. The embedding is stored in the `embedding` field for each event.
+The parameter `input` defines the name of the field that contains the text for which an embedding should be calculated. The embedding is stored in the field defined by the `output` parameter (defaults to `embedding`) for each event.
+If you want to add just one embedding for all events, you can specify the text used for the embedding in the parameter `input_text`. In this case, the `input` parameter is ignored. This is usual for semantic search (see example below), where you want to calculate the embedding for the search query only once.
 Per default the model `text-embedding-ada-002` is used - this can be changed with the `model` parameter.
 If you want to limit the amount of API calls, you can specify a maximum number of calls with the parameter `maxcalls`.
 If you want to continue on errors, you can specify the parameter `continue_on_errors=true`.
@@ -42,7 +43,7 @@ Note that some models in Hugging Face are not often used and therefore loaded on
 The following example is using [named-entity recognition](https://en.wikipedia.org/wiki/Named-entity_recognition), to extract the location, names, and organizations of the string given as `payload`:
 
     | makeresults
-    | eval payload="My name is Clara and I live in San Jose, California and I am working there for Splunk."
+    | eval payload="My name is Marcus and I live in Bangkok, Thailand and I am writing Splunk apps."
     | hflookup model="Jean-Baptiste/roberta-large-ner-english"
 
 You can also try another model, to do named-entity recognition in German:
@@ -79,7 +80,7 @@ Let's first load the movie dataset and store the embeddings in a lookup table:
     | openaiembeddings input=plot_synopsis
     | outputlookup movies.csv
 
-*Note*: Using a lookup table is not necessary, but that way we can reuse the embeddings for multiple queries.
+_Note_: Using a lookup table is not necessary, but that way we can reuse the embeddings for multiple queries.
 
 Now we can use the `dotproduct` command to calculate the [cosine similarity](https://en.wikipedia.org/wiki/Cosine_similarity) between the embedding of the input text and the embeddings of each movie plot:
 

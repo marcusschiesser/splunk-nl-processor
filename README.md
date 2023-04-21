@@ -4,6 +4,8 @@ Splunk SPL Command to call AI Inference APIs for NLP for each event.
 
 ## Build
 
+Make sure you run the project in the Dev container.
+
 Run `bash build.sh`
 
 ## Run
