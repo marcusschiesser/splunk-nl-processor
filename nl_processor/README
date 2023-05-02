@@ -16,7 +16,7 @@ If you want to use OpenAI embeddings, please get an [API key from OpenAI](https:
 The `hflookup` command runs the [Hugging Face AI Inference API](https://huggingface.co/inference-api) for each input event by passing the event's `payload` parameter and returns a new event for each result of the API call.
 
 The parameter `model` specifies the ID of the [Hugging Face model](https://huggingface.co/models) to use, e.g. [`mschiesser/ner-bert-german`](https://huggingface.co/mschiesser/ner-bert-german).
-If you want to limit the amount of API calls, you can specify a maximum number of calls with the parameter `maxcalls`.
+If you want to limit the amount of API calls, you can specify a maximum number of calls with the parameter `maxcalls`. The default value is `100`. To disable the limit, set `maxcalls=0`.
 If you want to continue on errors, you can specify the parameter `continue_on_errors=true`.
 
 ## Loading Datasets
@@ -31,7 +31,7 @@ The `openaiembeddings` command runs the [OpenAI Embeddings API](https://platform
 The parameter `input` defines the name of the field that contains the text for which an embedding should be calculated. The embedding is stored in the field defined by the `output` parameter (defaults to `embedding`) for each event.
 If you want to add just one embedding for all events, you can specify the text used for the embedding in the parameter `input_text`. In this case, the `input` parameter is ignored. This is usual for semantic search (see example below), where you want to calculate the embedding for the search query only once.
 Per default the model `text-embedding-ada-002` is used - this can be changed with the `model` parameter.
-If you want to limit the amount of API calls, you can specify a maximum number of calls with the parameter `maxcalls`.
+If you want to limit the amount of API calls, you can specify a maximum number of calls with the parameter `maxcalls`. The default value is `100`. To disable the limit, set `maxcalls=0`.
 If you want to continue on errors, you can specify the parameter `continue_on_errors=true`.
 
 # Examples
@@ -89,6 +89,44 @@ Now we can use the `dotproduct` command to calculate the [cosine similarity](htt
     | dotproduct vector1=embedding vector2=search output=similarities
     | sort - similarities
     | table title, plot_synopsis, similarities
+
+## Recommendations
+
+Using the `movies.csv` lookup from the example above, it's also easy to find similar movies to a given movie as a recommendation. We just need to calculate the cosine similarity between the embedding of the movie (here _Star Wars_) and the embeddings of all other movies:
+
+    | inputlookup movies.csv
+    | eval search_title="star wars"
+    | lookup movies.csv title as search_title output embedding as search
+    | dotproduct vector1=embedding vector2=search output=similarities
+    | sort - similarities
+    | table title, plot_synopsis, similarities
+
+## Classification
+
+The task is to classify reviews for airlines as positive and negative ones. To do so, first, calculate the embeddings of the reviews:
+
+    | hfdataset dataset=Alisairlines/Airlines_Reviews_Neuronet
+    | openaiembeddings maxcalls=0 input=Sentence
+    | outputlookup airlines_reviews.csv
+
+Then create a lookup table for the embeddings of the two classification labels (`positive` and `negative`):
+
+    | makeresults count=2
+    | streamstats count as id
+    | eval label=case(id==1, "positive", id==2, "negative")
+    | openaiembeddings input="label"
+    | outputlookup labels.csv
+
+Finally, calculate the cosine similarity between review embeddings and label embeddings, predict the label, and aggregate the results by airline:
+
+    | inputlookup airlines_reviews.csv
+    | eval label="positive" | lookup labels.csv label output embedding as label_a
+    | eval label="negative" | lookup labels.csv label output embedding as label_b
+    | dotproduct vector1=embedding vector2=label_a output=similarities_a
+    | dotproduct vector1=embedding vector2=label_b output=similarities_b
+    | eval prediction=similarities_a-similarities_b
+    | eval positive=if(prediction>0,1,null()), negative=if(prediction<=0,1,null())
+    | stats count(positive) as Positive, count(negative) as Negative by Airline
 
 # Contact
 

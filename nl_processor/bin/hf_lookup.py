@@ -24,7 +24,7 @@ class HfLookupCommand(StreamingCommand):
     hf_api_token = None
     model = Option(name="model", require=True)
     maxcalls = Option(
-        name="maxcalls", default=100, require=False, validate=validators.Integer(1)
+        name="maxcalls", default=100, require=False, validate=validators.Integer(0)
     )
     continue_on_errors = Option(
         name="continue_on_errors",
@@ -49,7 +49,7 @@ class HfLookupCommand(StreamingCommand):
         self.hf_api_token = decode_password(service, "hf_api_token")
         # Run saved search for each input record
         for index, record in enumerate(records):
-            if index == self.maxcalls:
+            if self.maxcalls != 0 and index == self.maxcalls:
                 self.logger.warning(
                     f"Reached limit of max. {self.maxcalls} API calls. Skipping remaining records. Try increasing the `maxcalls` argument."
                 )
