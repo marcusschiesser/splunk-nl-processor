@@ -1,5 +1,5 @@
 {
-    "python.formatting.provider": "black",
+    "python.formatting.provider": "none",
     "python.analysis.extraPaths": [
         "./nl_processor/lib"
     ],
@@ -8,8 +8,11 @@
         "makeresults",
         "maxcalls",
         "openai",
-        "openaiembeddings",
+        "openai",
         "searchcommands",
         "splunklib"
-    ]
+    ],
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    }
 }
