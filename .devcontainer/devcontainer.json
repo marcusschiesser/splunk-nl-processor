@@ -43,7 +43,8 @@
       "version": "3.7"
     }
   },
-  "postCreateCommand": "sudo apt-get update -y && sudo apt-get install -y libmagic-dev libsnappy-dev",
+  // /usr/share/man/man1/ needs to be writable by the current otherwise installation of package slim will fail (wants to create a man link)
+  "postCreateCommand": "sudo apt-get update -y && sudo apt-get install -y libmagic-dev libsnappy-dev && sudo chmod a+w /usr/share/man/man1/",
   "mounts": [
     "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
   ]
