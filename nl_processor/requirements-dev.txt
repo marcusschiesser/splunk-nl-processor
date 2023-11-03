@@ -1,6 +1,6 @@
 pytest>=6.2.5
 markdown2
-# slim (installation will show a permission error, but does work nevertheless - man link is not needed)
+# slim (installation wants to create a man link - so /usr/share/man/man1/ needs to be writable by the current user)
 splunk-packaging-toolkit==1.0.1
 semantic_version==2.6.0
 splunk-appinspect
