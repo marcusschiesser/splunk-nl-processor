@@ -9,7 +9,7 @@
           <p><a href="http://hf.co/settings/tokens" target="_blank">Get your API token</a> from
             Hugging Face and enter it here.</p>
           <splunk-control-group label="API Token" help="The API token retrieved from Hugging Face">
-            <splunk-text-input name="hf_api_token">
+            <splunk-text-input id="hf_api_token" name="hf_api_token">
             </splunk-text-input>
           </splunk-control-group>
         </div>
@@ -19,10 +19,24 @@
       <title>OpenAI Settings</title>
       <html>
         <div class="form-horizontal">
-          <p><a href="https://platform.openai.com/account/api-keys" target="_blank">Get your API
-            token</a> from OpenAI and enter it here.</p>
-          <splunk-control-group label="API Key" help="The API key retrieved from  OpenAI">
-            <splunk-text-input name="openai_api_key">
+          <dl>
+            <dt>To directly use OpenAI</dt>
+            <dd>- <a href="https://platform.openai.com/account/api-keys" target="_blank">Get your
+                API token</a> from OpenAI and enter it as <b>API Key</b>.</dd>
+            <dt>To use the OpenAI service on Azure</dt>
+            <dd>- <a href="https://azure.microsoft.com/en-us/products/ai-services/openai-service"
+                target="_blank">Get your
+                API token</a> from Azure and enter it as <b>API Key</b>.</dd>
+            <dd>- Additionally specify your <b>resource name</b> for azure (https://{resource
+              name}.openai.azure.com/).</dd>
+          </dl>
+          <splunk-control-group label="API Key" help="The API key retrieved from  OpenAI (or Azure)">
+            <splunk-text-input id="openai_api_key" name="openai_api_key">
+            </splunk-text-input>
+          </splunk-control-group>
+          <splunk-control-group label="resource name"
+            help="If running OpenAI on Azure, the name of the azure resource (otherwise empty)">
+            <splunk-text-input id="azure_resource_name" name="azure_resource_name">
             </splunk-text-input>
           </splunk-control-group>
         </div>

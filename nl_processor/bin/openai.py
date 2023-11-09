@@ -24,10 +24,13 @@ MODELS = {
     COMPLETIONS: "text-davinci-003",
 }
 
+AZURE_API_VERSION = "2023-05-15"
+
 
 @Configuration()
 class OpenAI(StreamingCommand):
     openai_api_key = None
+    azure_resource_name = None
     type = Option(
         name="type",
         default=EMBEDDINGS,
@@ -58,24 +61,41 @@ class OpenAI(StreamingCommand):
         require=False,
         validate=validators.Boolean(),
     )
+    deployment_id = Option(name="deployment_id", require=False)
+    model = Option(name="model", require=False)
 
     def call_openai_api(self, endpoint, payload):
         """Calls the OpenAI API
         :raises HTTPError: Raised for unsuccessful queries.
         """
-        headers = {
-            "Authorization": f"Bearer {self.openai_api_key}",
-            "Content-Type": "application/json",
-        }
-        API_URL = f"https://api.openai.com/v1/{endpoint}"
-        response = requests.post(API_URL, headers=headers, json=payload)
+        if self.azure_resource_name:
+            if not self.deployment_id:
+                raise Exception(
+                    "Specify deployment_id if running OpenAI command on Azure"
+                )
+            headers = {
+                "api-key": self.openai_api_key,
+                "Content-Type": "application/json",
+            }
+            api_url = f"https://{self.azure_resource_name}.openai.azure.com/openai/deployments/{self.deployment_id}/{endpoint}?api-version={AZURE_API_VERSION}"
+        else:
+            headers = {
+                "Authorization": f"Bearer {self.openai_api_key}",
+                "Content-Type": "application/json",
+            }
+            api_url = f"https://api.openai.com/v1/{endpoint}"
+
+        response = requests.post(api_url, headers=headers, json=payload)
         self.logger.info(
             f'msg="Successfully called OpenAI {endpoint} API" model="{payload.get("model")}" input_text="{payload.get("input", payload.get("prompt"))}"'
         )
         return response.json()
 
     def get_embedding(self, input):
-        payload = {"input": input, "model": MODELS[EMBEDDINGS]}
+        payload = {
+            "input": input,
+            "model": self.model if self.model else MODELS[EMBEDDINGS],
+        }
         json = self.call_openai_api(EMBEDDINGS, payload)
         if "error" in json:
             return json["error"]["message"]
@@ -84,7 +104,7 @@ class OpenAI(StreamingCommand):
     def get_completion(self, input):
         payload = {
             "prompt": input,
-            "model": MODELS[COMPLETIONS],
+            "model": self.model if self.model else MODELS[COMPLETIONS],
             "temperature": 0,
             "max_tokens": 100,
             "top_p": 1,
@@ -107,6 +127,11 @@ class OpenAI(StreamingCommand):
         app_name = self.metadata.searchinfo.app
         service = client.Service(token=session_key, app=app_name)
         self.openai_api_key = decode_password(service, "openai_api_key")
+        conf = service.confs["commands"]
+        stanza = conf["openai"]
+        self.azure_resource_name = (
+            stanza["azure_resource_name"] if "azure_resource_name" in stanza else None
+        )
         # if input is specified, use it to call the OpenAI API directly
         if self.input:
             result = self.get_result(self.input)

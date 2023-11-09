@@ -35,6 +35,14 @@ If you want to add just one inference for all events, you can specify the text u
 If you want to limit the amount of API calls, you can specify a maximum number of calls with the parameter `maxcalls`. The default value is `100`. To disable the limit, set `maxcalls=0`.
 If you want to continue on errors, you can specify the parameter `continue_on_errors=true`.
 
+### OpenAI hosted on Azure
+
+If the OpenAI service on Azure is used, the `resource name` has to be configured additionally to the `API key` in the [setup page](/app/nl_processor/setup). 
+
+Additionally the `deployment_id` has to be specified on each call of the OpenAI command.
+
+For example if the deployment name is 'gpt' then use `openai type=completions deployment_id=gpt input=prompt output=explanation`.
+
 # Examples
 
 Note that some models in Hugging Face are not often used and therefore loaded on-demand. If you're getting a `Model ... is currently loading` error, please try again after half a minute.
@@ -58,6 +66,8 @@ We can use this prompt template to let OpenAI generate an explanation for an err
     | lookup prompts.csv id output prompt
     | eval prompt=replace(replace(prompt,"{COMPONENT}",component),"{ERROR}",error)
     | openai type=completions input=prompt output=explanation
+
+If using Azure, make sure to add the parameter `deployment_id` to the openai command.
 
 ## Named Entity Recognition
 
@@ -88,6 +98,8 @@ The following example is generating an [embedding](https://en.wikipedia.org/wiki
     | makeresults
     | eval input="Covid cases are increasing fast!"
     | openai input=input output=embedding
+
+If using Azure, make sure to add the parameter `deployment_id` to the openai command.
 
 Embeddings can be used for tasks such as semantic search, clustering and text classification.
 
@@ -137,6 +149,8 @@ Then create a lookup table for the embeddings of the two classification labels (
     | eval label=case(id==1, "positive", id==2, "negative")
     | openai input="label" output=embedding
     | outputlookup labels.csv
+
+If using Azure, make sure to add the parameter `deployment_id` to the openai command.
 
 Finally, calculate the cosine similarity between review embeddings and label embeddings, predict the label, and aggregate the results by airline:
 

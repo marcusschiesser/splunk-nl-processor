@@ -26,8 +26,9 @@ def encode_password(service, field_name, password):
         if storage_password.clear_password != password:
             # password exists and it got changed, update it
             service.storage_passwords.delete(field_name, passwords_realm)
-            storage_password = service.storage_passwords.create(
-                password, field_name, passwords_realm
-            )
+            if password:
+                storage_password = service.storage_passwords.create(
+                    password, field_name, passwords_realm
+                )
     else:
         service.storage_passwords.create(password, field_name, passwords_realm)
